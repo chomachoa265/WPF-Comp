@@ -21,7 +21,7 @@ namespace DataGrid_EX
         {
             InitializeComponent();
 
-            this.DataContext = new AdornerExWindow_VM();
+            this.DataContext = new AdonerExWindow_VM();
 
         }
     }

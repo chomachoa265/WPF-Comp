@@ -8,8 +8,8 @@ using System.Windows.Input;
 
 namespace DataGrid_EX.AttachedBehavior
 {
-    public static class HeaderClickBehavior
-    {
-        public static ICommand GetCommand(DependencyObject obj) => (ICommand)obj.GetValue(CommandProperty);
-    }
+    //public static class HeaderClickBehavior
+    //{
+    //    public static ICommand GetCommand(DependencyObject obj) => (ICommand)obj.GetValue(CommandProperty);
+    //}
 }

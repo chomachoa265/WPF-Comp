@@ -1,6 +1,9 @@
-﻿using DataGrid_EX.Services;
-using DataGrid_EX.ViewModels;
+﻿using DataGrid_EX.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,21 +14,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DataGrid_EX
+namespace DataGrid_EX.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Page_ComboBoxs.xaml 的互動邏輯
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Page_ComboBoxs : Page
     {
-        public MainWindow()
+        public Page_ComboBoxs()
         {
             InitializeComponent();
-
-            var navService = new FrameNavigationService(MainFrame);
-
-            this.DataContext = new MainWindow_VM(navService);
-
+            DataContext = new Page_ComboBoxes_VM();
         }
     }
 }

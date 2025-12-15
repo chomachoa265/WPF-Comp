@@ -10,11 +10,22 @@
         Title="MainWindow" Height="450" Width="800">
     
     <d:Window.DataContext>
-        <localVM:AdornerExWindow_VM />
+        <localVM:MainWindow_VM />
     </d:Window.DataContext>
 
     <Grid>
-        <DataGrid ItemsSource="{Binding Rows}"
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="*" />
+            <RowDefinition  Height="auto"/>
+        </Grid.RowDefinitions>
+        <Frame x:Name="MainFrame" Grid.Row="0"  NavigationUIVisibility="Hidden"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Button Content="Dialog" Margin="10 0" Command="{Binding GoDialogPageCommand}" />
+            <Button Content="ComboBox" Margin=" 10 0" Command="{Binding GoComboBoxPageCommand}"/>
+            <Button Content="Adoner" Margin=" 10 0"/>
+            <Button Content="DataGrid" Margin="10 0" Command="{Binding GoDataGridPageCommand}"/>
+        </StackPanel>
+        <!--<DataGrid ItemsSource="{Binding Rows}"
           AutoGenerateColumns="False"
           CanUserAddRows="False"
           AlternationCount="999999">
@@ -22,7 +33,7 @@
 
             <DataGrid.Columns>
 
-                <!-- Row Index Column (TemplateColumn) -->
+                --><!-- Row Index Column (TemplateColumn) --><!--
                 <DataGridTemplateColumn Width="45"
                                 IsReadOnly="True"
                                 CanUserSort="False"
@@ -37,7 +48,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <!-- 以下全部都是正常 DataGridTextColumn，不破壞排序 -->
+                --><!-- 以下全部都是正常 DataGridTextColumn，不破壞排序 --><!--
                 <DataGridTextColumn Header="Name"
                             Binding="{Binding Revenue}"
                             SortMemberPath="Name" />
@@ -51,6 +62,6 @@
                             SortMemberPath="Score" />
 
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
     </Grid>
 </Window>
