@@ -9,6 +9,7 @@ namespace DataGrid_EX.Models
     public class CustomColumnHeader
     {
         public string Title { get; set; } = "";
+        public string SubTitle { get; set; } = "";
         public string Unit { get; set; } = "";
     }
 }

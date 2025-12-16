@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DataGrid_EX.Views"
       xmlns:localVM="clr-namespace:DataGrid_EX.ViewModels"
+      xmlns:ap="clr-namespace:DataGrid_EX.AttachPropertys"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Page_DataGrids">
@@ -12,7 +13,30 @@
         <localVM:Page_DataGrids_VM/>
     </d:Window.DataContext>
     <Grid>
-        <DataGrid ItemsSource="{Binding Rows}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="➕ 增加欄位" 
+                Command="{Binding AddColumnCommand}" 
+                Padding="10,5" Margin="0,0,10,0"/>
+
+            <Button Content="➖ 刪除欄位" 
+                Command="{Binding DeleteColumnCommand}" 
+                Padding="10,5"/>
+            <DataGrid AutoGenerateColumns="False" ItemsSource="{Binding Rows}" ap:DataGridHelper.DynamicColumns="{Binding ColumnInfos}">
+                <DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        <Setter Property="Padding" Value="0" />
+                        <Setter Property="Margin" Value="0" />
+                    </Style>
+                </DataGrid.ColumnHeaderStyle>
+            </DataGrid>
+        </StackPanel>
+        <!--<DataGrid ItemsSource="{Binding Rows}"
           AutoGenerateColumns="False"
           CanUserAddRows="False"
           AlternationCount="999999">
@@ -21,7 +45,7 @@
             <DataGrid.Columns>
 
                 
-         <!--Row Index Column (TemplateColumn)--> 
+         --><!--Row Index Column (TemplateColumn)--><!-- 
         
                 <DataGridTemplateColumn Width="45"
                                 IsReadOnly="True"
@@ -38,7 +62,7 @@
                 </DataGridTemplateColumn>
 
                 
-         <!--以下全部都是正常 DataGridTextColumn，不破壞排序--> 
+         --><!--以下全部都是正常 DataGridTextColumn，不破壞排序--><!-- 
         
                 <DataGridTextColumn Header="Name"
                             Binding="{Binding Revenue}"
@@ -53,6 +77,6 @@
                             SortMemberPath="Score" />
 
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid>-->
     </Grid>
 </Page>

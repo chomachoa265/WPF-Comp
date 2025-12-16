@@ -33,7 +33,7 @@ namespace DataGrid_EX.ViewModels
             Rows.Add(new ReportData());
             Rows.Add(new ReportData());
 
-
+            Debug.WriteLine(Application.Current.Resources.Count);
             StatRows.Add(new StatsData("Mean"));
             RecalculateStats();
         }
