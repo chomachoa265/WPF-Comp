@@ -16,6 +16,7 @@ namespace DataGrid_EX.ViewModels
     public partial class Page_DataGrids_VM
     {
         public ObservableCollection<ReportData> Rows { get; set; } = new ObservableCollection<ReportData>();
+        public ObservableCollection<ReportData> Rows2 { get; set; } = new ObservableCollection<ReportData>();
         public ObservableCollection<StatsData> StatRows { get; set; } = new ObservableCollection<StatsData>();
         public ObservableCollection<ColumnInfo> ColumnInfos { get; } = new ObservableCollection<ColumnInfo>();
         public Page_DataGrids_VM()
@@ -31,6 +32,11 @@ namespace DataGrid_EX.ViewModels
             Rows.Add(new ReportData());
             Rows.Add(new ReportData());
 
+            Rows2.Add(new ReportData
+            {
+                Revenue = 1234.5f,
+                Age = 32,
+            });
 
             StatRows.Add(new StatsData("Mean"));
             RecalculateStats();
