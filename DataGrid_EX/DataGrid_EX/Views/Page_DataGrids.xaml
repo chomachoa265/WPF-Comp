@@ -2,6 +2,9 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:behaviors="clr-namespace:DataGrid_EX.AttachedBehavior"
+      xmlns:ext="clr-namespace:DataGrid_EX.Extensions"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:DataGrid_EX.Views"
       xmlns:localVM="clr-namespace:DataGrid_EX.ViewModels"
@@ -12,7 +15,53 @@
     <d:Window.DataContext>
         <localVM:Page_DataGrids_VM/>
     </d:Window.DataContext>
-    <Grid>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <WrapPanel Grid.Row="0" Margin="0,0,0,10">
+            <GroupBox Header="Row Operations" Margin="0,0,10,0" Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Add Row" Command="{Binding AddRowCommand}" 
+                            Width="80" Margin="5"/>
+                    <Button Content="Delete Row" Command="{Binding RemoveRowCommand}" 
+                            Width="80" Margin="5" Background="#FFCCCC"/>
+                </StackPanel>
+            </GroupBox>
+
+            <GroupBox Header="Column Operations" Padding="5">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Add Col" Command="{Binding AddColumnCommand}" Margin="5"/>
+                    <Button Content="Del Col" Command="{Binding RemoveColumnCommand}" Margin="5"/>
+                </StackPanel>
+            </GroupBox>
+        </WrapPanel>
+
+        <DataGrid x:Name="TopGrid" Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding GridData}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                  
+                  ext:DataGridExtensions.BindableColumns="{Binding GridColumns}">
+
+            <i:Interaction.Behaviors>
+                <behaviors:DataGridSyncBehavior TargetGrid="{Binding ElementName=BottomGrid}" />
+            </i:Interaction.Behaviors>
+        </DataGrid>
+
+        <DataGrid x:Name="BottomGrid" Grid.Row="3"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding GridData}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  
+                  ext:DataGridExtensions.BindableColumns="{Binding GridColumns}">
+        </DataGrid>
+    </Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="auto"/>
@@ -46,47 +95,5 @@
                 </Style>
             </DataGrid.ColumnHeaderStyle>
         </DataGrid>
-        <!--<DataGrid ItemsSource="{Binding Rows}"
-          AutoGenerateColumns="False"
-          CanUserAddRows="False"
-          AlternationCount="999999">
-           
-
-            <DataGrid.Columns>
-
-                
-         --><!--Row Index Column (TemplateColumn)--><!-- 
-        
-                <DataGridTemplateColumn Width="45"
-                                IsReadOnly="True"
-                                CanUserSort="False"
-                                CanUserResize="False"
-                                Header="#">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=DataGridRow},
-                                              Path=AlternationIndex}"
-                               HorizontalAlignment="Center"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-
-                
-         --><!--以下全部都是正常 DataGridTextColumn，不破壞排序--><!-- 
-        
-                <DataGridTextColumn Header="Name"
-                            Binding="{Binding Revenue}"
-                            SortMemberPath="Name" />
-
-                <DataGridTextColumn Header="Age"
-                            Binding="{Binding Age}"
-                            SortMemberPath="Age" />
-
-                <DataGridTextColumn Header="Score"
-                            Binding="{Binding Familys}"
-                            SortMemberPath="Score" />
-
-            </DataGrid.Columns>
-        </DataGrid>-->
-    </Grid>
+    </Grid>-->
 </Page>

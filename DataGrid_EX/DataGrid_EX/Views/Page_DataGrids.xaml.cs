@@ -1,6 +1,7 @@
 ﻿using DataGrid_EX.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,17 @@ namespace DataGrid_EX.Views
         public Page_DataGrids()
         {
             InitializeComponent();
-
+            Debug.WriteLine("Page_DataGridsTirgerr");
             DataContext = new Page_DataGrids_VM();
+
+            // 模擬一些資料 (僅作示範，實際應來自 ViewModel)
+        //    var data = new[] {
+        //    new { Id = 1, Name = "Item A", Description = "Test data for synchronization" },
+        //    new { Id = 2, Name = "Item B", Description = "Resize the columns to see magic" }
+        //};
+
+        //    TopGrid.ItemsSource = data;
+        //    BottomGrid.ItemsSource = data;
         }
     }
 }
