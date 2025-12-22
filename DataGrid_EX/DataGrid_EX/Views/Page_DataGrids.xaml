@@ -12,10 +12,15 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Page_DataGrids">
+
     <d:Window.DataContext>
-        <localVM:Page_DataGrids_VM/>
+        <localVM:Page_DataGrids_VM />
     </d:Window.DataContext>
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -23,7 +28,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <WrapPanel Grid.Row="0" Margin="0,0,0,10">
+        <WrapPanel Grid.Column="0" Grid.Row="0" Margin="0,0,0,10">
             <GroupBox Header="Row Operations" Margin="0,0,10,0" Padding="5">
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Add Row" Command="{Binding AddRowCommand}" 
@@ -35,13 +40,13 @@
 
             <GroupBox Header="Column Operations" Padding="5">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="Add Col" Command="{Binding AddColumnCommand}" Margin="5"/>
-                    <Button Content="Del Col" Command="{Binding RemoveColumnCommand}" Margin="5"/>
+                    <Button Content="Add Col" Command="{Binding AddColCommand}" Margin="5"/>
+                    <Button Content="Del Col" Command="{Binding RemoveSelectedColumnCommand}" Margin="5"/>
                 </StackPanel>
             </GroupBox>
         </WrapPanel>
 
-        <DataGrid x:Name="TopGrid" Grid.Row="1"
+        <DataGrid x:Name="TopGrid" Grid.Column="0" Grid.Row="1"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding GridData}"
                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
@@ -53,13 +58,39 @@
             </i:Interaction.Behaviors>
         </DataGrid>
 
-        <DataGrid x:Name="BottomGrid" Grid.Row="3"
+        <DataGrid x:Name="BottomGrid" Grid.Column="0" Grid.Row="3"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding GridData}"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
                   
                   ext:DataGridExtensions.BindableColumns="{Binding GridColumns}">
         </DataGrid>
+        <GroupBox Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" Header="Column Info Inspector">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" 
+                           Text="{Binding StatusMessage}" 
+                           FontWeight="Bold" 
+                           Foreground="Blue" 
+                           Margin="0,0,0,5" 
+                           TextWrapping="Wrap"/>
+
+                <ListBox Grid.Row="1" 
+                         ItemsSource="{Binding SelectedColumnValues}" 
+                         BorderBrush="Gray" 
+                         BorderThickness="1">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Padding="2"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </GroupBox>
     </Grid>
     <!--<Grid>
         <Grid.RowDefinitions>

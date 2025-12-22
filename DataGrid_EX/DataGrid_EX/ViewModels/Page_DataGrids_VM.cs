@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DataGrid_EX.ViewModels
 {
@@ -18,79 +19,44 @@ namespace DataGrid_EX.ViewModels
     public partial class Page_DataGrids_VM : ObservableObject
     {
 
-        // 這是給 DataGrid 欄位定義用的集合
+        // 綁定給 DataGrid 的欄位設定集合
         [ObservableProperty]
         private ObservableCollection<ColumnConfig> _gridColumns = new();
 
 
-        // 這是 DataGrid 的實際資料 (Rows)
-        // 為了支援動態欄位，通常使用 Dictionary 或 ExpandoObject，這裡為求簡單用 dynamic
         [ObservableProperty]
         private ObservableCollection<RowItem> _gridData = new();
+
+        // ★ 核心：用來存儲「目前被點選」的那個欄位設定
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(RemoveSelectedColumnCommand))] // 當選取變更時，檢查刪除按鈕能不能按
+        private ColumnConfig? _selectedColumnConfig;
+
+        // 顯示目前選了誰 (給 UI 顯示用)
+        [ObservableProperty]
+        private string _statusMessage = "請點選任一欄位標頭...";
+
+        // --- 顯示選取結果 (共用) ---
+        [ObservableProperty]
+        private ObservableCollection<string> _selectedColumnValues = new();
+
+        [ObservableProperty]
+        private string _selectedColumnTitle = "尚未選取";
 
 
         [ObservableProperty]
         private RowItem? _selectedRow;
 
-        public ObservableCollection<ReportData> Rows { get; set; } = new ObservableCollection<ReportData>();
-        public ObservableCollection<ReportData> Rows2 { get; set; } = new ObservableCollection<ReportData>();
-        public ObservableCollection<StatsData> StatRows { get; set; } = new ObservableCollection<StatsData>();
-        public ObservableCollection<ColumnInfo> ColumnInfos { get; } = new ObservableCollection<ColumnInfo>();
         public Page_DataGrids_VM()
         {
-            // 初始欄位
-            GridColumns.Add(new ColumnConfig { Header = "ID", BindingPath = "Id", Width = 50 });
-            GridColumns.Add(new ColumnConfig { Header = "Name", BindingPath = "Name", Width = 150 });
-
-            // 初始資料
-            GridData.Add(new { Id = 1, Name = "Linbaba", Extra = "Init" });
-            GridData.Add(new { Id = 2, Name = "User", Extra = "Init" });
-            //ColumnInfos = new ObservableCollection<ColumnInfo>
-            //{
-            //    new ColumnInfo(header : new CustomColumnHeader{ Title="123", SubTitle="456", Unit="°"},propName:"Age"),
-            //    new ColumnInfo(header : new CustomColumnHeader{ Title="123", SubTitle="456", Unit="°"},propName:"Revenue"),
-            //};
-
-            //Rows.Add(new ReportData());
-            //Rows.Add(new ReportData());
-            //Rows.Add(new ReportData());
-            //Rows.Add(new ReportData());
-
-            //Rows2.Add(new ReportData
-            //{
-            //    Revenue = 1234.5f,
-            //    Age = 32,
-            //});
-
-            StatRows.Add(new StatsData("Mean"));
-            RecalculateStats();
+            AddColumn("ID", "Id");
+            AddColumn("Name", "Name");
+            AddColumn("Score", "Score");
+            AddRow(); // 會觸發 CollectionChanged -> 觸發計算
+            AddRow();
         }
-        private void RecalculateStats()
-        {
-            Type rowType = typeof(ReportData);
-
-            foreach (var colInfo in ColumnInfos)
-            {
-                string propName = colInfo.Header.Title;
-                PropertyInfo? prop = rowType.GetProperty(propName);
-                if (prop == null) { continue; }
-                List<double> values = new();
-                foreach (var row in Rows)
-                {
-                    object? raw = prop.GetValue(row);
-
-                    if (raw is double d)
-                    {
-                        values.Add(d);
-                    }
-                }
-
-                double max = values.Max();
-                double min = values.Min();
 
 
-            }
-        }
 
 
         [RelayCommand]
@@ -137,29 +103,56 @@ namespace DataGrid_EX.ViewModels
             }
         }
 
-        [RelayCommand]
-        public void AddColumn()
+
+        // 輔助方法：建立欄位並綁定點擊事件
+        private void AddColumn(string header, string bindingPath)
         {
-            // 動態新增一個欄位
-            string newColName = $"Col {GridColumns.Count + 1}";
             GridColumns.Add(new ColumnConfig
             {
-                Header = newColName,
-                BindingPath = "Name", // 這裡暫時重複綁 Name 作示範
-                Width = 100
+                Header = header,
+                BindingPath = bindingPath,
+                Width = 100,
+                // ★ 這裡把每個欄位的 Command 都綁定到同一個方法
+                Command = ColumnHeaderClickCommand
             });
-
-            // 注意：因為兩個 DataGrid 都綁定到同一個 GridColumns 集合
-            // 所以兩個 Grid 會同時新增欄位 -> 觸發 CollectionChanged -> 觸發 SyncBehavior 重綁
         }
+
+        // --- Command 1: 點選欄位標頭 ---
         [RelayCommand]
-        public void RemoveColumn()
+        private void ColumnHeaderClick(ColumnConfig col)
         {
-            if (GridColumns.Count > 0)
+            // 1. 紀錄被點選的欄位實例
+            SelectedColumnConfig = col;
+
+            // 2. 更新狀態訊息
+            StatusMessage = $"已選取欄位: {col.Header}";
+        }
+
+        // --- Command 2: 刪除選取欄位 ---
+        // CanExecute: 只有當 SelectedColumnConfig 不為空時，按鈕才給按
+        [RelayCommand(CanExecute = nameof(CanRemoveColumn))]
+        private void RemoveSelectedColumn()
+        {
+            if (SelectedColumnConfig != null && GridColumns.Contains(SelectedColumnConfig))
             {
-                GridColumns.RemoveAt(GridColumns.Count - 1);
+                string removedName = SelectedColumnConfig.Header;
+
+                // ★ 這一行執行後，DataGridExtensions 會監聽到變動，自動把畫面上的 Column 刪掉
+                GridColumns.Remove(SelectedColumnConfig);
+
+                // 清空選取狀態
+                SelectedColumnConfig = null;
+                StatusMessage = $"已刪除欄位: {removedName}";
             }
         }
+
+        [RelayCommand]
+        private void AddCol()
+        {
+            AddColumn("Score", "Score");
+        }
+
+        private bool CanRemoveColumn() => SelectedColumnConfig != null;
     }
 }
 

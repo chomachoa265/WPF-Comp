@@ -6,7 +6,7 @@
              StartupUri="/Views/MainWindow.xaml"
              >
     <Application.Resources>
-        <DataTemplate x:Key="DynamicHeaderTemplate" DataType="{x:Type localM:CustomColumnHeader}">
+        <!--<DataTemplate x:Key="DynamicHeaderTemplate" DataType="{x:Type localM:CustomColumnHeader}">
             <Border BorderBrush="Gray" BorderThickness="0,0,0,2" HorizontalAlignment="Stretch">
                 <UniformGrid Rows="3" Background="AliceBlue">
                     <TextBlock Text="{Binding Title}" FontWeight="Bold" Foreground="#333" HorizontalAlignment="Stretch"/>
@@ -14,6 +14,19 @@
                     <TextBlock Text="{Binding Unit}" FontWeight="Bold" Foreground="#333"/>
                 </UniformGrid>
             </Border>
+        </DataTemplate>-->
+        <DataTemplate x:Key="DynamicHeaderTemplate">
+            <Grid Background="Transparent">
+                <TextBlock Text="{Binding Header}" 
+                       FontWeight="Bold" 
+                       VerticalAlignment="Center">
+                    <TextBlock.InputBindings>
+                        <MouseBinding Gesture="LeftClick" 
+                                  Command="{Binding Command}" 
+                                  CommandParameter="{Binding}" />
+                    </TextBlock.InputBindings>
+                </TextBlock>
+            </Grid>
         </DataTemplate>
     </Application.Resources>
 </Application>

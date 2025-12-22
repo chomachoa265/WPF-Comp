@@ -11,6 +11,10 @@ namespace DataGrid_EX.Models
         [ObservableProperty]
         private string _name = string.Empty;
 
+        // 新增一個數值欄位，用來演示平均值計算
+        [ObservableProperty]
+        private double _score = 0.0f;
+
         [ObservableProperty]
         private string _description = string.Empty;
 

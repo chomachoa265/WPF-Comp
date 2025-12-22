@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace DataGrid_EX.Extensions
 {
@@ -17,6 +19,9 @@ namespace DataGrid_EX.Extensions
         public string Header { get; set; } = "";
         public string BindingPath { get; set; } = "";
         public double Width { get; set; } = 100;
+
+        // 新增：每個欄位專屬的命令
+        public ICommand? Command { get; set; }
     }
     public static class DataGridExtensions
     {
@@ -73,13 +78,23 @@ namespace DataGrid_EX.Extensions
             // 處理移除
             else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
             {
-                foreach (ColumnConfig item in e.OldItems)
+                // e.OldItems 是一個非泛型的 IList，所以裡面每個元素都是 object
+                foreach (var oldItem in e.OldItems)
                 {
-                    // 這裡簡單假設 Header 唯一，實務上可用更嚴謹的對應
-                    var colToRemove = grid.Columns.FirstOrDefault(c => (string)c.Header == item.Header);
-                    if (colToRemove != null)
+                    // 1. 先確認移除的項目真的是 ColumnConfig
+                    if (oldItem is ColumnConfig configItem)
                     {
-                        grid.Columns.Remove(colToRemove);
+                        // 2. 去 DataGrid 的欄位列表找人
+                        // 條件：欄位的 Header 必須也是 ColumnConfig，而且就是我們要刪除的那個物件
+                        var colToRemove = grid.Columns.FirstOrDefault(c =>
+                            c.Header is ColumnConfig headerConfig && // 確保 UI 的 Header 是 Config 物件
+                            headerConfig == configItem);             // 比對物件記憶體位置是否相同 (或是比對 ID/Header文字)
+
+                        // 3. 找到就移除 UI
+                        if (colToRemove != null)
+                        {
+                            grid.Columns.Remove(colToRemove);
+                        }
                     }
                 }
             }
@@ -95,12 +110,13 @@ namespace DataGrid_EX.Extensions
             // 這裡建立 DataGridTextColumn，如果需要 TemplateColumn 可在此擴充
             var col = new DataGridTextColumn
             {
-                Header = config.Header,
+                Header = config,
                 Width = new DataGridLength(config.Width),
                 // 這裡的 Binding 是綁定到 RowData 的屬性名稱 (例如 Dictionary["Key"] 或 Property)
                 Binding = new Binding(config.BindingPath),
                 MinWidth = 50
             };
+            col.HeaderTemplate = (DataTemplate)Application.Current.FindResource("DynamicHeaderTemplate");
             return col;
         }
 
