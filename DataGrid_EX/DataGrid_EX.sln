@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8 d17.14
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataGrid_EX", "DataGrid_EX\DataGrid_EX.csproj", "{EF6D8CB4-6FBA-46C0-AC39-04D6837ED8D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSplitDataGrid", "AutoSplitDataGrid\AutoSplitDataGrid.csproj", "{59D07168-0EEF-49B2-8315-E32617CB7D37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTestProj", "TaskTestProj\TaskTestProj.csproj", "{A3E4544B-F166-4388-B575-A7F399233752}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{EF6D8CB4-6FBA-46C0-AC39-04D6837ED8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF6D8CB4-6FBA-46C0-AC39-04D6837ED8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF6D8CB4-6FBA-46C0-AC39-04D6837ED8D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59D07168-0EEF-49B2-8315-E32617CB7D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59D07168-0EEF-49B2-8315-E32617CB7D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59D07168-0EEF-49B2-8315-E32617CB7D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59D07168-0EEF-49B2-8315-E32617CB7D37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E4544B-F166-4388-B575-A7F399233752}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E4544B-F166-4388-B575-A7F399233752}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E4544B-F166-4388-B575-A7F399233752}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E4544B-F166-4388-B575-A7F399233752}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

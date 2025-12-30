@@ -5,6 +5,7 @@ using DataGrid_EX.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
@@ -137,11 +138,14 @@ namespace DataGrid_EX.ViewModels
             {
                 string removedName = SelectedColumnConfig.Header;
 
+                foreach (var column in GridColumns)
+                {
+                }
                 // ★ 這一行執行後，DataGridExtensions 會監聽到變動，自動把畫面上的 Column 刪掉
-                GridColumns.Remove(SelectedColumnConfig);
+                //GridColumns.Remove(SelectedColumnConfig);
 
                 // 清空選取狀態
-                SelectedColumnConfig = null;
+                //SelectedColumnConfig = null;
                 StatusMessage = $"已刪除欄位: {removedName}";
             }
         }
